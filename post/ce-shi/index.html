@@ -1,10 +1,10 @@
 <html>
   <head>
-  <meta charset="utf-8" />
+    <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Gridea | Gridea</title>
+<title>测试 | Gridea</title>
 <meta name="description" content="温故而知新" />
-<link rel="shortcut icon" href="https://KriseWang.github.io/favicon.ico?v=1575520097979">
+<link rel="shortcut icon" href="https://KriseWang.github.io/favicon.ico?v=1575520209285">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://KriseWang.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://KriseWang.github.io">
-  <img class="avatar" src="https://KriseWang.github.io/images/avatar.png?v=1575520097979" alt="">
+  <img class="avatar" src="https://KriseWang.github.io/images/avatar.png?v=1575520209285" alt="">
   </a>
   <h1 class="site-title">
     Gridea
@@ -70,47 +70,62 @@
   </div>
 </div>
 
-        <div class="current-tag-container">
-            <h2 class="title">
-                标签：# Gridea
-            </h2> 
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              测试
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-12-05
+              </span>
+              <span>
+                1 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>let's begin</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
         </div>
-        <div class="post-container">
-  
-    <article class="post">
-      <a href="https://KriseWang.github.io/post/hello-gridea">
-        <h2 class="post-title">Hello Gridea</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2018-12-12
-        </span>
-        <span>
-          2 min read
-        </span>
-        
-          <a href="https://KriseWang.github.io/tag/AbnoTKz4z" class="post-tag">
-            # Gridea
-          </a>
-        
-      </div>
-      
-        <a href="https://KriseWang.github.io/post/hello-gridea" class="post-feature-image" style="background-image: url('https://KriseWang.github.io/post-images/hello-gridea.png')">
-        </a>
-      
-      <div class="post-abstract">
-        <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
 
-      </div>
-    </article>
-  
-</div>
+        
 
-        <div class="pagination-container">
-  
-  
-</div>
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'e845a1bb701b38f7b104',
+    clientSecret: '03bc029cd17285c94175bdb667e663936fb572ab',
+    repo: 'KriseWang.github.io',
+    owner: 'KriseWang',
+    admin: ['KriseWang'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
 
         <div class="site-footer">
   Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
