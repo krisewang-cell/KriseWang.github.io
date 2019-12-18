@@ -1,0 +1,677 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KriseWang</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://KriseWang.github.io/favicon.ico?v=1576677900697">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://KriseWang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="KriseWang - Atom Feed" href="https://KriseWang.github.io/atom.xml">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://KriseWang.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://KriseWang.github.io/images/avatar.png?v=1576677900697" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">KriseWang</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#1lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9B%B8%E5%85%B3%E4%BD%BF%E7%94%A8">1.Lambda表达式相关使用</a>
+<ul>
+<li><a href="#1-%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F">1、语法格式</a></li>
+<li><a href="#2-%E7%B1%BB%E5%9E%8B%E6%8E%A8%E6%96%AD">2、类型推断</a></li>
+</ul>
+</li>
+<li><a href="#2-%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3">2、函数式接口</a>
+<ul>
+<li><a href="#1-%E5%AE%9A%E4%B9%89">1、定义</a></li>
+<li><a href="#2-java%E5%86%85%E7%BD%AE%E6%A0%B8%E5%BF%83%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3">2、Java内置核心函数式接口</a></li>
+</ul>
+</li>
+<li><a href="#3-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8%E5%92%8C%E6%9E%84%E9%80%A0%E5%99%A8%E5%BC%95%E7%94%A8">3、方法引用和构造器引用</a>
+<ul>
+<li><a href="#1-%E5%85%B3%E4%BA%8E">1、关于</a></li>
+<li><a href="#2-%E6%B3%A8">2、注</a></li>
+<li><a href="#3-%E6%9E%84%E9%80%A0%E5%99%A8%E5%BC%95%E7%94%A8">3、构造器引用</a></li>
+<li><a href="#4-%E6%95%B0%E7%BB%84%E5%BC%95%E7%94%A8">4、数组引用</a></li>
+</ul>
+</li>
+<li><a href="#4-stream">4、Stream</a>
+<ul>
+<li><a href="#1-%E7%89%B9%E7%82%B9">1、特点：</a></li>
+<li><a href="#2-%E5%88%9B%E5%BB%BAstream%E6%96%B9%E5%BC%8F">2、创建Stream方式</a>
+<ul>
+<li><a href="#2-%E9%80%9A%E8%BF%87%E6%95%B0%E7%BB%84">2、通过数组</a></li>
+<li><a href="#3-%E9%80%9A%E8%BF%87stream%E7%9A%84of">3、通过Stream的of()</a></li>
+<li><a href="#4-%E5%88%9B%E5%BB%BA%E6%97%A0%E9%99%90%E6%B5%81">4、创建无限流</a></li>
+</ul>
+</li>
+<li><a href="#3-stream%E7%9A%84%E4%B8%AD%E9%97%B4%E6%93%8D%E4%BD%9C">3、Stream的中间操作</a>
+<ul>
+<li><a href="#1-%E5%85%B3%E4%BA%8E-2">1、关于</a></li>
+<li><a href="#2-%E7%AD%9B%E9%80%89%E4%B8%8E%E5%88%87%E7%89%87">2、筛选与切片</a></li>
+<li><a href="#3-%E6%98%A0%E5%B0%84">3、映射</a></li>
+<li><a href="#4-%E6%8E%92%E5%BA%8F">4、排序</a></li>
+</ul>
+</li>
+<li><a href="#4-stream%E7%9A%84%E7%BB%88%E6%AD%A2%E6%93%8D%E4%BD%9C">4、Stream的终止操作</a>
+<ul>
+<li><a href="#1-%E5%8C%B9%E9%85%8D%E4%B8%8E%E6%9F%A5%E6%89%BE">1、匹配与查找</a></li>
+<li><a href="#2-%E5%BD%92%E7%BA%A6">2、归约</a></li>
+<li><a href="#3-%E6%94%B6%E9%9B%86">3、收集</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">Learn anything</div>
+    <a class="rss" href="https://KriseWang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">Java8新特性小结</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2019-12-18 / 9 min read
+        </div>
+        
+        <div class="post-content yue">
+          <h2 id="1lambda表达式相关使用">1.Lambda表达式相关使用</h2>
+<h3 id="1-语法格式">1、语法格式</h3>
+<pre><code class="language-java">//匿名内部类
+Runnable r1 = new Runnable(){
+    @Override
+    public void run(){
+        System.out.println(&quot;666&quot;);
+    }
+}
+
+//Lambda表达式
+Runnable r2 () -&gt; System.out.println(&quot;666&quot;);
+
+/*
+	语法格式：
+	1、无参，无返回值（如上）
+	2、需要一个参数，但没有返回值（Consumer&lt;T t&gt;：消费型接口）
+	3、数据类型可以省略，“类型推断”机制
+		e.g. Consumer&lt;String&gt; com = System.out::println;
+	4、Lambda弱只需要一个参数时，参数的小括号可以省略（如上）
+	5、Lambda需要两个或以上的参数，多条执行语句，并且可以有返回值
+	6、当Lambda体内只有一条语句时，return与大括号若有，都可以省略
+*/
+
+// e.g.5
+	Comparator&lt;Integer&gt; com =(a,b) -&gt; {
+        System.out::println(&quot;666&quot;);
+        return Integer.compare(a,b);
+    }
+
+//e.g.6
+	Comparator&lt;Integer&gt; com =(a,b) -&gt; Integer.compare(a,b);
+</code></pre>
+<h3 id="2-类型推断">2、类型推断</h3>
+<p>​		Lambda表达式的类型依赖于上下文环境，是由编译器推断出的。</p>
+<h2 id="2-函数式接口">2、函数式接口</h2>
+<h3 id="1-定义">1、定义</h3>
+<ul>
+<li>只包含一个抽象方法的接口。</li>
+<li>可以通过Lambda表达式来创建该接口的对象。 （若Lambda表达式抛出一个受检异常（非运行时异常），那么该异常需要在目标接口的抽象方法上进行声明）。</li>
+<li>@FunctionalInterface注解</li>
+</ul>
+<h3 id="2-java内置核心函数式接口">2、Java内置核心函数式接口</h3>
+<table>
+<thead>
+<tr>
+<th>函数式接口</th>
+<th>参数类型</th>
+<th>返回类型</th>
+<th style="text-align:center">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consumer<T><br/>消费型接口</td>
+<td>T</td>
+<td>void</td>
+<td style="text-align:center">对类型为T的对象应用操作，包含方法：void accept(T t)</td>
+</tr>
+<tr>
+<td>Supplier<T><br/>供给型接口</td>
+<td>无</td>
+<td>T</td>
+<td style="text-align:center">返回类型为T的对象，包含方法：T get()</td>
+</tr>
+<tr>
+<td>Function&lt;T, R&gt;<br/>函数型接口</td>
+<td>T</td>
+<td>R</td>
+<td style="text-align:center">对类型为T的对象应用操作，并返回结果。结果是R类型的对象。包含方法：R apply(T t)</td>
+</tr>
+<tr>
+<td>Predicate<T><br/>断定型接口</td>
+<td>T</td>
+<td>Boolean</td>
+<td style="text-align:center">确定类型为T的对象是否满足某约束，并返回Boolean值。包含方法：Boolean test(T t)</td>
+</tr>
+<tr>
+<td>BiFunction&lt;T,U,R&gt;</td>
+<td>T,U</td>
+<td>R</td>
+<td style="text-align:center">对类型为T，U参数应用操作，返回R类型的结果。包含方法：R apply(T t,U u)</td>
+</tr>
+<tr>
+<td>UnaryOperator<T><br/>（Function子接口）</td>
+<td>T</td>
+<td>T</td>
+<td style="text-align:center">对类型为T的对象进行一元运算，并返回T类型的结果。包含方法为：T apply(T t)</td>
+</tr>
+<tr>
+<td>BinaryOperator<T><br/>（BiFunction子接口）</td>
+<td>T，T</td>
+<td>T</td>
+<td style="text-align:center">对类型为T的对象进行二元运算，并返回T类型的结果。包含方法为：T apply(T t1,T t2)</td>
+</tr>
+<tr>
+<td>BiConsumer&lt;T,U&gt;</td>
+<td>T,U</td>
+<td>void</td>
+<td style="text-align:center">对类型为T，U参数应用操作。包含方法为：void accept(T t,U u)</td>
+</tr>
+<tr>
+<td>BiPredicate&lt;T,U&gt;</td>
+<td>T,U</td>
+<td>Boolean</td>
+<td style="text-align:center">包含方法为：boolean test(T t,U u)</td>
+</tr>
+<tr>
+<td>ToIntFunction<T><br/>ToLongFunction<T><br/>ToDoubleFunction<T></td>
+<td>T</td>
+<td>int<br/>long<br/>double</td>
+<td style="text-align:center">分别计算int，long，double值的函数</td>
+</tr>
+<tr>
+<td>IntFunction<T><br/>LongFunction<T><br/>DoubleFunction<T></td>
+<td>int，long，double</td>
+<td>T</td>
+<td style="text-align:center">参数分别为int，long，double类型的函数</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-方法引用和构造器引用">3、方法引用和构造器引用</h2>
+<h3 id="1-关于">1、关于</h3>
+<pre><code>+ 当要传递给Lambda体的操作，已经有实现的方法了，可以使用方法引用。
++ 方法引用可以看做是Lambda表达式深层次的表达。换句话说，方法引用就是Lambda表达式，也就是函数式接口的一个实例，通过方法的名字来指向一个方法，可以认为是Lambda表达式的一个语法糖。
++ 要求：实现接口的抽象方法的参数列表和返回值类型必须与方法引用的方法的参数列表和返回值类型保持一致。
++ 格式：使用操作符“::”
++ 主要是用情况
+</code></pre>
+<ul>
+<li>
+<ul>
+<li>对象::实例方法名</li>
+<li>类::静态方法名</li>
+<li>类::实例方法名</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-java">Consumer&lt;String&gt; com = x -&gt; System.out.println(x);
+//等于
+Consumer&lt;String&gt; com = System.out::println;
+
+Comparator&lt;Integer&gt; com = (x,y) -&gt; Integer.compare(x,y);
+//等于
+Comparator&lt;Integer&gt; com = Integer::compare;
+
+BiPredicate&lt;String,String&gt; bp = (x,y) -&gt; x.equals(y);
+//等于
+BiPredicate&lt;String,String&gt; bp = String::equals;
+boolean flag = bp.test(&quot;asd&quot;,&quot;asd&quot;);
+</code></pre>
+<h3 id="2-注">2、注</h3>
+<p>​	当函数式接口方法的第一个参数是需要引用方法的调用者，并且第二个参数是需要引用方法的参数（或无参数）时：ClassName::MethodName</p>
+<h3 id="3-构造器引用">3、构造器引用</h3>
+<pre><code>格式：ClassName::new（要求构造器参数列表要与接口中抽象方法的参数列表保持一致，且方法的返回值即为构造器对应类的对象）
+</code></pre>
+<pre><code class="language-java">Function&lt;Integer,MyClass&gt; fun = n -&gt; new MyClass(n);
+//等于
+Function&lt;Integer,MyClass&gt; fun = MyClass::new;
+</code></pre>
+<h3 id="4-数组引用">4、数组引用</h3>
+<p>​	 格式：type[]::new</p>
+<pre><code class="language-java">Function&lt;Integer,Integer[]&gt; ff = n -&gt;new Integer[n];
+//等于
+Function&lt;Integer,Integer[]&gt; ff = Integer[]::new;
+</code></pre>
+<h2 id="4-stream">4、Stream</h2>
+<h3 id="1-特点">1、特点：</h3>
+<ul>
+<li>使用Stream对集合数据进行操作，就类似于使用SQL执行的数据库查询。</li>
+<li>对于NoSQL的数据需要java层面进行处理。</li>
+<li>Stream和Collection集合的区别：Collection是一种静态的内存数据结构，而Stream是有关计算的。前者主要面向内存，存储在内存中，后者主要是面向CPU，通过CPU实现计算。</li>
+<li>
+<ul>
+<li>Stream自己不会存储元素。</li>
+<li>Stream不会改变源对象，相反，他们会返回一个 持有结果的新Stream</li>
+<li>Stream操作是延迟执行的。这意味着他们会等到需要结果的时候才执行。</li>
+</ul>
+</li>
+<li>三个执行步骤：</li>
+<li>
+<ul>
+<li>1、创建Stream：一个数据源（集合、数组），获取一个流</li>
+<li>2、中间操作：一个中间操作链，对数据源的数据进行处理</li>
+<li>3、终止操作：一旦执行终止操作，就执行中间操作链，并产生结果。之后，不会再被使用</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-创建stream方式">2、创建Stream方式</h3>
+<pre><code>#### 1、通过集合
+</code></pre>
+<ul>
+<li>default Stream<E> stream(): 返回一个顺序流</li>
+<li>default Stream<E> parallelStream():返回一个并行流</li>
+</ul>
+<h4 id="2-通过数组">2、通过数组</h4>
+<p>​			通过Arrays的静态方法stream()</p>
+<ul>
+<li>static <T> Stream<T> stream(T[] array):返回一个流</li>
+<li>IntStream、LongStream、DoubleStream</li>
+</ul>
+<h4 id="3-通过stream的of">3、通过Stream的of()</h4>
+<ul>
+<li>public static<T> Stream<T> of (T... values):返回一个流</li>
+</ul>
+<h4 id="4-创建无限流">4、创建无限流</h4>
+<p>​			Stream.iterate()和Stream.generate()（前者迭代，后者生成）</p>
+<ul>
+<li>public static<T> Stream<T> iterate(final T seed, final UnaryOperator<T> f)</li>
+<li>public static<T> Stream<T> generate(Supplier<T> s)</li>
+</ul>
+<pre><code class="language-java">//迭代创建
+Stream&lt;Integer&gt; stream = Stream.itreate(0,x -&gt; x+2);
+stream.forEach(System.out::println);
+
+//生成创建
+Stream&lt;Double&gt; stream = Stream.generate(Math::random);
+stream.forEach(System.out::println);
+</code></pre>
+<h3 id="3-stream的中间操作">3、Stream的中间操作</h3>
+<h4 id="1-关于-2">1、关于</h4>
+<p>​		多个中间操作可以连接起来形成一条流水线，除非流水线上触发终止操作，否则中间操作不会执行任何的处理！而在终止操作时一次性全部处理，称为“惰性求值”。</p>
+<h4 id="2-筛选与切片">2、筛选与切片</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">filter(Predicate p)</td>
+<td>接受Lambda，从流中排除某些元素</td>
+</tr>
+<tr>
+<td style="text-align:center">distinct()</td>
+<td>筛选，通过流所生成的元素的hashcode()和equals()去除重复元素</td>
+</tr>
+<tr>
+<td style="text-align:center">limit(long maxSize)</td>
+<td>截断流，使其元素不超过给定数量</td>
+</tr>
+<tr>
+<td style="text-align:center">skip(long n)</td>
+<td>跳过元素，返回一个扔掉了前n个元素的流。若流中元素不足n个，则返回一个空流。与limit(n)互补</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-映射">3、映射</h4>
+<p>​		按照某种关系将流内元素映射， 参考： f(x) = y</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>map(Function f)</td>
+<td>接受一个函数作为参数，这个函数会被应用到每一个元素上，并将其映射成一个新的元素。</td>
+</tr>
+<tr>
+<td>flatMap(Function f)</td>
+<td>接受一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流。</td>
+</tr>
+<tr>
+<td>mapToDouble(ToDoubleFunction f)</td>
+<td>接受一个函数作为参数，这个函数会被应用到每一个元素上，并将其映射成一个新的DoubleStream。</td>
+</tr>
+<tr>
+<td>mapToInt(ToIntFunction f)</td>
+<td>接受一个函数作为参数，这个函数会被应用到每一个元素上，并将其映射成一个新的IntStream。</td>
+</tr>
+<tr>
+<td>mapToLong(ToLongFunction f)</td>
+<td>接受一个函数作为参数，这个函数会被应用到每一个元素上，并将其映射成一个新的LongStream。</td>
+</tr>
+</tbody>
+</table>
+<p>​		注：针对map()和flatMap(),可以参考list的add()和addAll()的区别。</p>
+<h4 id="4-排序">4、排序</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sorted()</td>
+<td>产生一个新流，其中自然排序</td>
+</tr>
+<tr>
+<td>sorted(Comparator com)</td>
+<td>产生一个姓刘，其中按比较器顺序排序</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-stream的终止操作">4、Stream的终止操作</h3>
+<h4 id="1-匹配与查找">1、匹配与查找</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方法</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">allMatch(Predicate p)</td>
+<td style="text-align:left">检查是否匹配所有元素</td>
+</tr>
+<tr>
+<td style="text-align:left">anyMatch(Predicate p)</td>
+<td style="text-align:left">检查是否至少匹配一个元素</td>
+</tr>
+<tr>
+<td style="text-align:left">noneMatch(Predicate p)</td>
+<td style="text-align:left">检查是否没有匹配所有元素</td>
+</tr>
+<tr>
+<td style="text-align:left">findFirst()</td>
+<td style="text-align:left">返回第一个元素</td>
+</tr>
+<tr>
+<td style="text-align:left">findAny()</td>
+<td style="text-align:left">返回当前流的任意元素</td>
+</tr>
+<tr>
+<td style="text-align:left">count()</td>
+<td style="text-align:left">返回流中的元素总数</td>
+</tr>
+<tr>
+<td style="text-align:left">max(Comparator c)</td>
+<td style="text-align:left">返回流中最大值</td>
+</tr>
+<tr>
+<td style="text-align:left">min(Comparator c)</td>
+<td style="text-align:left">返回流中最小值</td>
+</tr>
+<tr>
+<td style="text-align:left">forEach(Consumer c)</td>
+<td style="text-align:left">内部迭代</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-归约">2、归约</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>reduce(T t,BinaryOperator b)</td>
+<td>将流中元素反复结合，得到一个值。返回T</td>
+</tr>
+<tr>
+<td>reduce(BinaryOperator b)</td>
+<td>将流中元素反复结合，返回Optional<T></td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-收集">3、收集</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>collect(Collector c)</td>
+<td>将流转换为其他形式。接受一个Collector接口的实现，用于给Stream中元素做汇总的方法。（关于Collectors提供的静态方法见api）</td>
+</tr>
+</tbody>
+</table>
+<p>​		关于Optional回头补上。。。</p>
+
+        </div>
+
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://KriseWang.github.io/post/springboot-shang-huo-gu-bi-ji-shang">
+                <h3 class="post-title">
+                  SpringBoot尚硅谷笔记（上）
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'e845a1bb701b38f7b104',
+    clientSecret: '03bc029cd17285c94175bdb667e663936fb572ab',
+    repo: 'KriseWang.github.io',
+    owner: 'KriseWang',
+    admin: ['KriseWang'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://KriseWang.github.io/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
