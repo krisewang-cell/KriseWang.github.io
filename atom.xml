@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://KriseWang.github.io</id>
     <title>KriseWang</title>
-    <updated>2019-12-18T14:06:12.538Z</updated>
+    <updated>2019-12-25T00:47:19.773Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://KriseWang.github.io"/>
     <link rel="self" href="https://KriseWang.github.io/atom.xml"/>
@@ -10,6 +10,16 @@
     <logo>https://KriseWang.github.io/images/avatar.png</logo>
     <icon>https://KriseWang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, KriseWang</rights>
+    <entry>
+        <title type="html"><![CDATA[Java-高效的开发技巧]]></title>
+        <id>https://KriseWang.github.io/post/java-gao-xiao-de-kai-fa-ji-qiao</id>
+        <link href="https://KriseWang.github.io/post/java-gao-xiao-de-kai-fa-ji-qiao">
+        </link>
+        <updated>2019-12-25T00:46:55.000Z</updated>
+        <content type="html"><![CDATA[<p>引用阿里中间件公众号的文章，记录一下：</p>
+<p>https://mp.weixin.qq.com/s?__biz=MzU4NzU0MDIzOQ==&amp;mid=2247488458&amp;idx=5&amp;sn=c1812a41adf66c5f028ac97076f5432f&amp;chksm=fdeb21aaca9ca8bc53af2355461d6fef8d3fe8a20322576069723c227f16b1a9c0943352b164&amp;mpshare=1&amp;scene=23&amp;srcid=1216JzR6p6lh3i0nI2ih0R0P&amp;sharer_sharetime=1576470828987&amp;sharer_shareid=6ad51e190478d1ec7d1f68fbacf06b1b#rd</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Java8新特性小结]]></title>
         <id>https://KriseWang.github.io/post/java8-xin-te-xing-xiao-jie</id>
