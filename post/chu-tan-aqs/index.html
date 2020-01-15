@@ -1,0 +1,738 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KriseWang</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://KriseWang.github.io/favicon.ico?v=1579008679895">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://KriseWang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="KriseWang - Atom Feed" href="https://KriseWang.github.io/atom.xml">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://KriseWang.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://KriseWang.github.io/images/avatar.png?v=1579008679895" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">KriseWang</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-aqs%E7%AE%80%E8%BF%B0">一、AQS简述</a></li>
+<li><a href="#%E4%BA%8C-aqs%E5%86%85%E9%83%A8%E7%9A%84%E6%96%B9%E6%B3%95">二、AQS内部的方法</a>
+<ul>
+<li><a href="#1-aqs%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95">1、AQS模板方法</a></li>
+<li><a href="#2-aqs%E8%87%AA%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95">2、AQS自实现方法</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E8%8A%82%E7%82%B9%E5%92%8C%E5%90%8C%E6%AD%A5%E9%98%9F%E5%88%97">三、节点和同步队列</a></li>
+<li><a href="#%E5%9B%9B-%E7%8B%AC%E5%8D%A0%E5%BC%8F%E9%94%81%E7%9A%84%E8%8E%B7%E5%8F%96">四、独占式锁的获取</a>
+<ul>
+<li><a href="#1-%E7%8B%AC%E5%8D%A0%E5%BC%8F%E8%8E%B7%E5%8F%96%E6%BA%90%E7%A0%81">1、独占式获取源码</a></li>
+<li><a href="#2-%E7%8B%AC%E5%8D%A0%E9%94%81%E9%87%8A%E6%94%BE%E6%BA%90%E7%A0%81">2、独占锁释放源码</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">Learn anything</div>
+    <a class="rss" href="https://KriseWang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">初探AQS</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-01-14 / 20 min read
+        </div>
+        
+        <div class="post-content yue">
+          <h2 id="一-aqs简述">一、AQS简述</h2>
+<p>​		AQS是AbustactQueuedSynchronizer的简称，它是一个Java提高的底层同步工具类，用一个<strong>int类型的变量表示同步状态</strong>，并提供了一系列的CAS操作来管理这个同步状态。AQS的主要作用是为Java中的并发同步组件提供统一的底层支持，例如ReentrantLock，CountdowLatch就是基于AQS实现的，用法是通过继承AQS实现其模版方法，然后将子类作为同步组件的内部类。AQS在功能上分为两类：独占功能和共享功能。先贴一个自实现的锁。</p>
+<pre><code class="language-java">public class SelfLock implements Lock{
+	
+	//state 表示获取到锁 state=1 获取到了锁，state=0，表示这个锁当前没有线程拿到
+	private static class Sync extends AbstractQueuedSynchronizer{
+		
+		//是否占用
+		protected boolean isHeldExclusively() {
+			return getState()==1;
+		}
+        
+		//获取
+		protected boolean tryAcquire(int arg) {
+			if(compareAndSetState(0,1)) {
+                //设置拿到排他锁的线程是当前的线程
+				setExclusiveOwnerThread(Thread.currentThread());
+				return true;
+			}
+			return false;
+		}
+		
+        //释放，此时该线程持有锁，所以不需要cas操作
+		protected boolean tryRelease(int arg) {
+			if(getState()==0) {
+				throw new UnsupportedOperationException();
+			}
+			setExclusiveOwnerThread(null);
+			setState(0);
+			return true;
+		}
+		
+		Condition newCondition() {
+			return new ConditionObject();
+		}
+	}
+	
+	private final Sync sycn = new Sync();
+
+	@Override
+	public void lock() {
+		sycn.acquire(1);
+		
+	}
+
+	@Override
+	public void lockInterruptibly() throws InterruptedException {
+		sycn.acquireInterruptibly(1);
+		
+	}
+
+	@Override
+	public boolean tryLock() {
+		return sycn.tryAcquire(1);
+	}
+
+	@Override
+	public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
+		return sycn.tryAcquireNanos(1, unit.toNanos(time));
+	}
+
+	@Override
+	public void unlock() {
+		sycn.release(1);
+		
+	}
+
+	@Override
+	public Condition newCondition() {
+		return sycn.newCondition();
+	}
+
+
+}
+
+</code></pre>
+<p>然后我们来简单分析：</p>
+<h2 id="二-aqs内部的方法">二、AQS内部的方法</h2>
+<p>​		AQS使用的是模板模式，内部提供了很多模板方法。</p>
+<h3 id="1-aqs模板方法">1、AQS模板方法</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方法名称</th>
+<th style="text-align:center">简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">void acquire(int arg)</td>
+<td style="text-align:center">模板方法，独占式获取同步状态，如果当前线程获取同步状态成功，则由该方法返回，否则会进入同步队列等待，此方法会调用子类重写的tryAcquire方法</td>
+</tr>
+<tr>
+<td style="text-align:left">void acquireInterruptibly(int arg)</td>
+<td style="text-align:center">模板方法，与acquire相同，但是此方法可以响应中断，当前线程未获取到同步状态而进入同步队列中，如果当前线程被中断，此方法会抛出InterruptedException并返回</td>
+</tr>
+<tr>
+<td style="text-align:left">boolean tryAcquireNanos(int arg, long nanosTimeout)</td>
+<td style="text-align:center">模板方法，在acquireInterruptibly基础上增加了超时限制，如果当前线程在超时时间内没有获取到同步状态，则会返回false,如果获取到了则会返回true</td>
+</tr>
+<tr>
+<td style="text-align:left">boolean release(int arg)</td>
+<td style="text-align:center">模板方法，独占式的释放同步状态，该方法会在释放同步状态后，将同步队列中的第一个节点包含的线程唤醒</td>
+</tr>
+<tr>
+<td style="text-align:left">void acquireShared(int arg)</td>
+<td style="text-align:center">模板方法，共享式的获取同步状态，如果当前系统未获取到同步状态，将会进入同步队列等待，与acquire的主要区别在于同一时刻可以有多个线程获取到同步状态</td>
+</tr>
+<tr>
+<td style="text-align:left">void acquireSharedInterruptibly(int arg)</td>
+<td style="text-align:center">模板方法，与acquireShared一致，但是可以响应中断</td>
+</tr>
+<tr>
+<td style="text-align:left">boolean tryAcquireSharedNanos(int arg, long nanosTimeout)</td>
+<td style="text-align:center">模板方法，在acquireSharedInterruptibly基础上增加了超时限制</td>
+</tr>
+<tr>
+<td style="text-align:left">boolean releaseShared(int arg)</td>
+<td style="text-align:center">模板方法，共享式的释放同步状态</td>
+</tr>
+</tbody>
+</table>
+<p>以	”void acquire(int arg)“	为例：</p>
+<pre><code class="language-java">public final void acquire(int arg) {
+    	//子类实现
+        if (!tryAcquire(arg) &amp;&amp;
+            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+            selfInterrupt();
+    }
+</code></pre>
+<h3 id="2-aqs自实现方法">2、AQS自实现方法</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方法名称</th>
+<th style="text-align:center">简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">protected boolean tryAcquire(int arg)</td>
+<td style="text-align:center">独占式获取同步状态，实现该方法需要查询当前状态并判断同步状态是否符合预期，然后通过CAS设置同步状态</td>
+</tr>
+<tr>
+<td style="text-align:left">protected boolean tryRelease(int arg)</td>
+<td style="text-align:center">独占式释放同步状态，等待获取同步状态的线程将有机会获取同步状态</td>
+</tr>
+<tr>
+<td style="text-align:left">protected int tryAcquireShared(int arg)</td>
+<td style="text-align:center">共享式获取独占状态，返回大于等于0的值，表示获取成功，反之获取失败</td>
+</tr>
+<tr>
+<td style="text-align:left">protected boolean  tryReleaseShared(int arg)</td>
+<td style="text-align:center">共享式释放同步状态</td>
+</tr>
+<tr>
+<td style="text-align:left">protected boolean isHeldExclusively()</td>
+<td style="text-align:center">当前同步器是否在独占模式下线程占用，一般该方法是否被当前线程所独占</td>
+</tr>
+</tbody>
+</table>
+<p>以上都是很基础的东西，在AQS里面注释也有对应的讲解和例子，下面我们开始进入正题：</p>
+<h2 id="三-节点和同步队列">三、节点和同步队列</h2>
+<p>我们先看Node的代码：</p>
+<pre><code class="language-java">static final class Node {
+        /** 表示节点在共享模式下 */
+        static final Node SHARED = new Node();
+        /** 表示节点在独占模式下 */
+        static final Node EXCLUSIVE = null;
+
+        /** 当线程等待超时或者被中断，则取消等待，设等待状态为-1，进入取消状态则不再变化 */
+        static final int CANCELLED =  1;
+        /** 后继节点处于等待状态，当前节点（为-1）被取消或者中断时会通知后继节点，使后继节点的线程得以运			行 */
+        static final int SIGNAL    = -1;
+        /** 当前节点处于等待队列，节点线程等待在Condition上，当其他线程对condition执行signall方法			时，等待队列转移到同步队列，加入到对同步状态的获取 */
+        static final int CONDITION = -2;
+        /**
+         * 与共享模式相关，在共享模式中，该状态标识结点的线程处于可运行状态
+         */
+        static final int PROPAGATE = -3;
+
+        /**
+         * 标识状态
+         */
+        volatile int waitStatus;
+
+        /**前驱节点，在出队时将其清空（GC）。在清空一个前驱节点，我们会短路的同时寻找一个未取消的节点，这			个节点总是存在因为头节点从未被取消。只有成功获取节点的结果，节点才会成为头部。 取消的线程永远不会		  成功获取，并且线程只会取消自身，不会取消任何其他节点。
+         */
+        volatile Node prev;
+
+        /**后继节点，在当前节点释放时将其唤醒。在入队期间指定位置，在绕行取消状态的前驱节点时调整位置，
+        并且在出队时取消（GC）。enq操作添加空节点时，附加后才分配前驱节点的next（所以next = null 不代   	  表就是最后一个节点）。所以如果下一个节点首次显现为空，我们可以从尾部开始往前驱扫描来进行再次检查。 
+         */
+        volatile Node next;
+
+        /**
+      	 *获取同步状态的线程。
+         */
+        volatile Thread thread;
+
+        /**
+          Node既可以作为同步队列节点使用，也可以作为Condition的等待队列节点使用。在作为同步队列节点时，			 nextWaiter可能有两个值：EXCLUSIVE、SHARED标识当前节点是独占模式还是共享模式；在作为等待		      队列节点使用时，nextWaiter保存后继节点。
+         */
+        Node nextWaiter;
+
+        /**
+         * 如果节点是共享模式则返回true
+         */
+        final boolean isShared() {
+            return nextWaiter == SHARED;
+        }
+
+        /**返回前驱节点，或者抛出空指针异常。当使用在前驱节点不可能为空的情况，空检查可能被忽略但可以帮助			虚拟机
+         */
+        final Node predecessor() throws NullPointerException {
+            Node p = prev;
+            if (p == null)
+                throw new NullPointerException();
+            else
+                return p;
+        }
+
+        Node() {    // 用于建立初始标头或SHARED标记
+        }
+
+        Node(Thread thread, Node mode) {     // Used by addWaiter
+            this.nextWaiter = mode;
+            this.thread = thread;
+        }
+
+        Node(Thread thread, int waitStatus) { // Used by Condition
+            this.waitStatus = waitStatus;
+            this.thread = thread;
+        }
+    }
+</code></pre>
+<p><strong>同步队列</strong>是AQS很重要的组成部分，它是一个双端队列（其实就是数据结构双向链表），遵循FIFO原则，主要作用是用来存放在锁上阻塞的线程，当一个线程尝试获取锁时，如果已经被占用，那么当前线程就会被构造成一个Node节点加入到同步队列的尾部，队列的头节点是成功获取锁的节点，当头节点线程获得锁时，会唤醒后面的节点并释放当前头节点的引用。</p>
+<figure data-type="image" tabindex="1"><img src="https://img-blog.csdnimg.cn/2019032820194244.png" alt="img"></figure>
+<ul>
+<li>
+<p>同步队列设置尾节点（未获取到锁的线程加入同步队列）:</p>
+<p>同步器AQS中包含两个节点类型的引用：一个指向头结点的引用（head),一个指向尾节点的引用（tail），当一个线程成功的获取到锁（同步状态），其他线程无法获取到锁，而是被构造成节点（包含当前线程，等待状态）加入到同步队列中等待获取到锁的线程释放锁。</p>
+<p>这个加入队列的过程，必须要保证线程安全。否则如果多个线程的环境下，可能造成添加到队列等待的节点顺序错误，或者数量不对。因此同步器提供了CAS原子的设置尾节点的方法（保证一个未获取到同步状态的线程加入到同步队列后，下一个未获取的线程才能够加入）。</p>
+<p>如下图，设置尾节点：</p>
+<figure data-type="image" tabindex="2"><img src="https://img-blog.csdnimg.cn/20190328202009404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0ppblhZYW4=,size_16,color_FFFFFF,t_70" alt="img"></figure>
+</li>
+<li>
+<p>同步队列设置首节点（原头节点释放锁，唤醒后继节点）：</p>
+</li>
+</ul>
+<p>同步队列遵循FIFO，头节点是获取锁（同步状态）成功的节点，头节点在释放同步状态的时候，会唤醒后继节点，而后继节点将会在获取锁（同步状态）成功时候将自己设置为头节点。设置头节点是由获取锁（同步状态）成功的线程来完成的，由于只有一个线程能够获取同步状态，则设置头节点的方法不需要CAS保证，只需要将头节点设置成为原首节点的后继节点 ，并断开原头结点的next引用。如下图，设置首节点：</p>
+<figure data-type="image" tabindex="3"><img src="https://img-blog.csdnimg.cn/2019032820203840.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0ppblhZYW4=,size_16,color_FFFFFF,t_70" alt="img"></figure>
+<h2 id="四-独占式锁的获取">四、独占式锁的获取</h2>
+<p>调用同步器的acquire(int arg)方法可以获取同步状态，<strong>该方法对中断不敏感</strong>，即线程获取同步状态失败后进入同步队列，后续对线程进行<strong>中断操作</strong>时，线程不会从同步队列中移除。</p>
+<p>​    (1) 当前线程实现通过tryAcquire()方法尝试获取锁，获取成功的话直接返回，如果尝试失败的话，进入同步队列排队，可以保证线程安全（CAS）的获取同步状态。</p>
+<p>​    (2) 如果尝试获取锁失败的话，构造同步节点（独占式的Node.EXCLUSIVE），通过addWaiter(Node node,int args)方法,将节点加入到同步队列的队列尾部。</p>
+<p>​    (3) 最后调用acquireQueued(final Node node, int args)方法，使该节点以死循环的方式获取同步状态，如果获取不到，则阻塞节点中的线程。acquireQueued方法当前线程在死循环中获取同步状态，而只有前驱节点是头节点的时候才能尝试获取锁（同步状态）（ p == head &amp;&amp; tryAcquire(arg)）。</p>
+<p>原因是：</p>
+<ol>
+<li>头结点是成功获取同步状态的节点，而头结点的线程释放锁以后，将唤醒后继节点，后继节点线程被唤醒后要检查自己的前驱节点是否为头结点。</li>
+<li>维护同步队列的FIFO原则，节点进入同步队列以后，就进入了一个自旋的过程，每个节点（后者说每个线程）都在自省的观察。</li>
+</ol>
+<p>下图为节点自旋检查自己的前驱节点是否为头结点：</p>
+<figure data-type="image" tabindex="4"><img src="https://img-blog.csdnimg.cn/20190328202625704.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0ppblhZYW4=,size_16,color_FFFFFF,t_70" alt="img"></figure>
+<h3 id="1-独占式获取源码">1、独占式获取源码</h3>
+<pre><code class="language-java">	/**   
+     *  独占式的获取同步状态           
+     */
+    public final void acquire(int arg) {
+        if (!tryAcquire(arg) &amp;&amp; acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+            selfInterrupt();
+    }
+</code></pre>
+<p><strong>尝试获取锁：tryAcquire方法：如果获取到了锁，*<em>tryAcquire返回true，反之，返回false。*</em></strong></p>
+<pre><code class="language-java">//方法2：
+    protected final boolean tryAcquire(int acquires) {
+        // 获取当前线程
+        final Thread current = Thread.currentThread();
+        // 获取“独占锁”的状态，获取父类AQS的标志位
+        int c = getState();
+        //c == 0 意思是锁（同步状态）没有被任何线程所获取
+        //1.当前线程是否是同步队列中头结点Node,如果是的话，则获取该锁，设置锁的状态，并设置锁的拥有者为		当前线程
+        if (c == 0) {
+            if (!hasQueuedPredecessors() &amp;&amp;
+               // 修改下状态为，这里的acquires的值是1，是写死的调用子类的lock的方法的时候
+               // 传进来的，如果c == 0，compareAndSetState操作会更新成功为1.
+                compareAndSetState(0, acquires)) {
+                // 上面CAS操作更新成功为1，表示当前线程获取到了锁，因为将当前线程设置为
+                // AQS的一个变量中，代表这个线程拿走了锁。
+                setExclusiveOwnerThread(current);
+                return true;
+            }
+        }
+        //2.如果c不为0，即状态不为0，表示锁已经被拿走。
+        //因为ReetrantLock是可重入锁，是可以重复lock和unlock的，所以这里还要判断一次，
+        //获取锁的线程是否为当前请求锁的线程。
+        else if (current == getExclusiveOwnerThread()) {
+        //如果是，state继续加1，这里nextc的结果就会 &gt; 1,这个判断表示获取到的锁的线程，
+            //还可以再获取锁，这里就是说的可重入的意思
+            int nextc = c + acquires;
+            if (nextc &lt; 0)
+                throw new Error(&quot;Maximum lock count exceeded&quot;);
+            setState(nextc);
+            return true;
+        }
+        return false;
+    }
+</code></pre>
+<p>**addWaiter方法的源码：回到aquire方法，**如果尝试获取同步状态（锁）失败的话,则构造同步节点（独占式的Node.EXCLUSIVE），通过addWaiter(Node node,int args)方法将该节点加入到同步队列的队尾。</p>
+<pre><code class="language-java">/**
+    * Creates and enqueues node for current thread and given mode.
+    * 如果尝试获取同步状态失败的话,则构造同步节点（独占式的Node.EXCLUSIVE），
+    * 通过addWaiter(Node node,int args)方法将该节点加入到同步队列的队尾。
+    * 
+    */
+    private Node addWaiter(Node mode) {
+        // 用当前线程构造一个Node对象，mode是一个表示Node类型的字段，
+        // 或者说是这个节点是独占的还是共享的，或者说AQS的这个队列中，
+        // 哪些节点是独占的，哪些节点是共享的。
+        Node node = new Node(Thread.currentThread(), mode);
+        // Try the fast path of enq; backup to full enq on failure
+        Node pred = tail;
+        //队列不为空的时候
+        if (pred != null) {
+            node.prev = pred;
+            // 确保节点能够被线程安全的添加，使用CAS方法
+            // 尝试修改为节点为最新的节点，如果修改失败，意味着有并发，
+            // 这个时候进入enq中的死循环，进行“自旋”的方式修改
+            if (compareAndSetTail(pred, node)) {
+                pred.next = node;
+                return node;
+            }
+        }
+        //进入自旋
+        enq(node);
+        return node;
+    }
+</code></pre>
+<p><strong>enq方法的源码：同步器通过死循环的方式来保证节点的正确添加，在“死循环” 中通过CAS将节点设置成为尾节点之后，当前线程才能从该方法中返回，否则当前线程不断的尝试设置。enq方法将并发添加节点的请求通过CAS变得“串行化”了。</strong></p>
+<pre><code class="language-java">    private Node enq(final Node node) {
+        for (;;) {
+            Node t = tail;
+            if (t == null) { // Must initialize
+                if (compareAndSetHead(new Node()))
+                    tail = head;
+            } else {
+                node.prev = t;
+                if (compareAndSetTail(t, node)) {
+                    t.next = node;
+                    return t;
+                }
+            }
+        }
+    }
+</code></pre>
+<p><strong>acquireQueued方法:在队列中的线程获取锁的过程：</strong></p>
+<pre><code class="language-java">/**
+    * acquireQueued方法当前线程在死循环中获取同步状态，而只有前驱节点是头节点才能尝试获取
+      同步状态（锁）（ p == head &amp;&amp; tryAcquire(arg)）
+    *原因是:1.头结点是成功获取同步状态（锁）的节点，而头节点的线程释放了同步状态以后，
+              将会唤醒其后继节点，后继节点的线程被唤醒后要检查自己的前驱节点是否为头结点。
+    *      2.维护同步队列的FIFO原则，节点进入同步队列之后，就进入了一个自旋的过程，
+              每个节点（或者说是每个线程）都在自省的观察。 
+    */
+    final boolean acquireQueued(final Node node, int arg) {
+        boolean failed = true;
+        try {
+            boolean interrupted = false;
+            //死循环检查（自旋检查）当前节点的前驱节点是否为头结点，才能获取锁
+            for (;;) {
+                // 获取节点的前驱节点
+                final Node p = node.predecessor();
+                if (p == head &amp;&amp; tryAcquire(arg)) {//节点中的线程循环的检查，自己的前驱节点是否为头节点
+                    //将当前节点设置为头结点，移除之前的头节点
+                    setHead(node);
+                    p.next = null; // help GC
+                    failed = false;
+                    return interrupted;
+                }
+                // 检查前一个节点的状态，看当前获取锁失败的线程是否要挂起
+                if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;
+                    //如果需要挂起，借助JUC包下面的LockSupport类的静态方法park挂起当前线程，直到被唤醒
+                    parkAndCheckInterrupt())
+                    interrupted = true;
+            }
+        } finally {
+            //如果有异常
+            if (failed)
+                //取消请求，将当前节点从队列中移除
+                cancelAcquire(node);
+        }
+    }
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="https://img-blog.csdnimg.cn/20190328210323212.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0ppblhZYW4=,size_16,color_FFFFFF,t_70" alt="img"></figure>
+<h3 id="2-独占锁释放源码">2、独占锁释放源码</h3>
+<pre><code class="language-java">/* 
+  1. unlock():unlock()是解锁函数，它是通过AQS的release()函数来实现的。
+ * 在这里，“1”的含义和“获取锁的函数acquire(1)的含义”一样，它是设置“释放锁的状态”的参数。
+ * 由于“公平锁”是可重入的，所以对于同一个线程，每释放锁一次，锁的状态-1。
+    unlock()在ReentrantLock.java中实现的，源码如下：
+ */
+    public void unlock() {
+        sync.release(1);
+    }
+</code></pre>
+<p>release()会调用tryRelease方法尝试释放当前线程持有的锁（同步状态），成功的话唤醒后继线程，并返回true，否则直接返回false。</p>
+<pre><code class="language-java">    public final boolean release(int arg) {
+        if (tryRelease(arg)) {
+            Node h = head;
+            if (h != null &amp;&amp; h.waitStatus != 0)
+                unparkSuccessor(h);
+            return true;
+        }
+        return false;
+    }
+// tryRelease() 尝试释放当前线程的同步状态（锁）
+  protected final boolean tryRelease(int releases) {
+            //c为释放后的同步状态
+          int c = getState() - releases;
+          //判断当前释放锁的线程是否为获取到锁（同步状态）的线程，不是抛出异常（非法监视器状态异常）
+          if (Thread.currentThread() != getExclusiveOwnerThread())
+              throw new IllegalMonitorStateException();
+          boolean free = false;
+          //如果锁（同步状态）已经被当前线程彻底释放，则设置锁的持有者为null，同步状态（锁）变的可获取
+          if (c == 0) {
+              free = true;
+              setExclusiveOwnerThread(null);
+          }
+          setState(c);
+          return free;
+</code></pre>
+<p>释放锁成功后，找到AQS的头结点，并唤醒它即可：</p>
+<pre><code class="language-java">// 4. 唤醒头结点的后继节点
+     private void unparkSuccessor(Node node) {
+         //获取头结点（线程）的状态
+        int ws = node.waitStatus;
+        //如果状态&lt;0,设置当前线程对应的锁的状态为0
+        if (ws &lt; 0)
+            compareAndSetWaitStatus(node, ws, 0);
+        Node s = node.next;
+         //解释:Thread to unpark is held in successor, which is normally just the next node. 
+         //But if cancelled or apparently（显然） null, traverse backwards(向后遍历) from tail to find the actual（实际的） non-cancelled successor（前继节点）.
+         //从队列尾部开始往前去找最前面的一个waitStatus小于0的节点。
+        if (s == null || s.waitStatus &gt; 0) {
+            s = null;
+            for (Node t = tail; t != null &amp;&amp; t != node; t = t.prev)
+                if (t.waitStatus &lt;= 0)
+                    s = t;
+        }
+        //唤醒后继节点对应的线程
+        if (s != null)
+            LockSupport.unpark(s.thread);
+    }
+</code></pre>
+<p>上面说的是ReentrantLock的公平锁获取和释放的AQS的源码，唯独还剩下一个非公平锁NonfairSync没说，其实，它和公平锁的唯一区别就是获取锁的方式不同，公平锁是按前后顺序一次获取锁，非公平锁是抢占式的获取锁，那ReentrantLock中的非公平锁NonfairSync是怎么实现的呢？</p>
+<pre><code class="language-java">/**
+     * Sync object for non-fair locks
+     */
+    static final class NonfairSync extends Sync {
+        private static final long serialVersionUID = 7316153563782823691L;
+        /**
+         * Performs lock.  Try immediate barge, backing up to normal
+         * acquire on failure.
+         */
+        final void lock() {
+            if (compareAndSetState(0, 1))
+                setExclusiveOwnerThread(Thread.currentThread());
+            else
+                acquire(1);
+        }
+        protected final boolean tryAcquire(int acquires) {
+            return nonfairTryAcquire(acquires);
+        }
+    }
+</code></pre>
+<p>​    公平锁会先进行！hasQueuedPredecessors（）判断，为true时在进行CAS操作。而非公平锁的lock先直接用cas判断state变量是否为0（尝试获取锁），成功的话更新成1，表示当前线程获取到了锁，不需要在排队，从而直接抢占的目的。而对于公平锁的lock方法是一开始就走AQS的双向队列排队获取锁。（简单来讲就是冲冲冲）</p>
+<p>​    <strong>非公平锁的效率比公平锁的效率高。因为公平锁的线程切换次数大于非公平锁（释放后在获取的几率高），会造成额外的开销。但是非公平会造成线程饥饿的问题。</strong></p>
+<p>​     <strong>总结:在获取同步状态的时候，同步器维护一个同步队列，获取失败的线程会被加入到队列中并在队列中自旋;移除队列（或停止自旋）的条件是前驱节点为头结点并且获取到了同步状态。在释放同步状态时，同步器调用tryRelease(int args)方法释放同步状态，然后唤醒头结点的后继节点。AQS的实现思路其实并不复杂，用一句话准确的描述的话，其实就是使用标志状态位status（volatile int state）和 一个双向队列的入队和出队来实现。AQS维护一个线程何时访问的状态，它只是对状态负责，而这个状态的含义，子类可以自己去定义。</strong></p>
+
+        </div>
+
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://KriseWang.github.io/post/java-gao-xiao-de-kai-fa-ji-qiao">
+                <h3 class="post-title">
+                  Java-高效的开发技巧
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'e845a1bb701b38f7b104',
+    clientSecret: '03bc029cd17285c94175bdb667e663936fb572ab',
+    repo: 'KriseWang.github.io',
+    owner: 'KriseWang',
+    admin: ['KriseWang'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://KriseWang.github.io/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
