@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://KriseWang.github.io</id>
     <title>KriseWang</title>
-    <updated>2020-01-16T11:52:59.747Z</updated>
+    <updated>2020-01-16T11:55:38.408Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://KriseWang.github.io"/>
     <link rel="self" href="https://KriseWang.github.io/atom.xml"/>
@@ -671,6 +671,7 @@ private final boolean parkAndCheckInterrupt() {
     }
 </code></pre>
 <p>​    公平锁会先进行！hasQueuedPredecessors（）判断，为true时在进行CAS操作。而非公平锁的lock先直接用cas判断state变量是否为0（尝试获取锁），成功的话更新成1，表示当前线程获取到了锁，不需要在排队，从而直接抢占的目的。而对于公平锁的lock方法是一开始就走AQS的双向队列排队获取锁。（简单来讲就是冲冲冲）</p>
+<p>到这儿大概也理解了，为什么没有将方法定义为abstract。自定义同步器要么是独占方法，要么是共享方式，他们也只需实现tryAcquire-tryRelease、tryAcquireShared-tryReleaseShared中的一种即可。但AQS也支持自定义同步器同时实现独占和共享两种方式，如ReentrantReadWriteLock。</p>
 <p>​    <strong>非公平锁的效率比公平锁的效率高。因为公平锁的线程切换次数大于非公平锁（释放后在获取的几率高），会造成额外的开销。但是非公平会造成线程饥饿的问题。</strong></p>
 <p>​     <strong>总结:在获取同步状态的时候，同步器维护一个同步队列，获取失败的线程会被加入到队列中并在队列中自旋;移除队列（或停止自旋）的条件是前驱节点为头结点并且获取到了同步状态。在释放同步状态时，同步器调用tryRelease(int args)方法释放同步状态，然后唤醒头结点的后继节点。AQS的实现思路其实并不复杂，用一句话准确的描述的话，其实就是使用标志状态位status（volatile int state）和 一个双向队列的入队和出队来实现。AQS维护一个线程何时访问的状态，它只是对状态负责，而这个状态的含义，子类可以自己去定义。</strong><br>
 ** 参考：《Java并发编程的艺术》 **</p>
